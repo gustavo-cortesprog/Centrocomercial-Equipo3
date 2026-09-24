@@ -1,0 +1,493 @@
+﻿@page
+@{
+    ViewData["Title"] = "SuperMarket";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperMarket</title>
+
+    <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                margin: 0;
+                font-family: Arial;
+                background: #f4f7f6;
+                color: #333;
+            }
+
+            header {
+                background: #087f5b;
+                color: white;
+                padding: 20px 7%;
+                display: flex;
+                align-items: center;
+                gap: 30px;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: bold;
+            }
+
+                .logo span {
+                    color: #ffd43b;
+                }
+
+            .buscador {
+                flex: 1;
+                padding: 13px;
+                border: none;
+                border-radius: 8px;
+                font-size: 15px;
+            }
+
+            .carrito {
+                background: white;
+                color: #087f5b;
+                padding: 12px 18px;
+                border-radius: 8px;
+                font-weight: bold;
+            }
+
+            nav {
+                background: white;
+                padding: 15px 7%;
+                display: flex;
+                gap: 25px;
+                border-bottom: 1px solid #ddd;
+            }
+
+                nav button {
+                    border: none;
+                    background: none;
+                    cursor: pointer;
+                    font-weight: bold;
+                    color: #444;
+                }
+
+                    nav button:hover {
+                        color: #087f5b;
+                    }
+
+            .contenedor {
+                width: 86%;
+                max-width: 1200px;
+                margin: 30px auto;
+            }
+
+            .banner {
+                background: #087f5b;
+                color: white;
+                padding: 30px;
+                border-radius: 15px;
+                margin-bottom: 30px;
+            }
+
+                .banner h1 {
+                    margin: 0 0 10px;
+                }
+
+                .banner button {
+                    background: #ffd43b;
+                    border: none;
+                    padding: 10px 18px;
+                    border-radius: 7px;
+                    cursor: pointer;
+                    font-weight: bold;
+                }
+
+            .productos {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 20px;
+            }
+
+            .producto {
+                background: white;
+                padding: 15px;
+                border-radius: 12px;
+                box-shadow: 0 3px 10px #ddd;
+                position: relative;
+            }
+
+                .producto img {
+                    width: 100%;
+                    height: 160px;
+                    object-fit: contain;
+                }
+
+                .producto h3 {
+                    margin: 8px 0;
+                }
+
+            .categoria {
+                color: #777;
+                font-size: 13px;
+            }
+
+            .precio {
+                color: #087f5b;
+                font-size: 21px;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+
+            .oferta {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: #e03131;
+                color: white;
+                padding: 5px;
+                border-radius: 5px;
+                font-size: 12px;
+            }
+
+            .producto button {
+                width: 100%;
+                background: #087f5b;
+                color: white;
+                border: none;
+                padding: 10px;
+                border-radius: 7px;
+                cursor: pointer;
+            }
+
+                .producto button:hover {
+                    background: #056b4d;
+                }
+
+            .carrito-box {
+                background: white;
+                margin-top: 35px;
+                padding: 25px;
+                border-radius: 12px;
+            }
+
+            .item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                padding: 12px 0;
+                gap: 10px;
+            }
+
+            .cantidad button {
+                width: 30px;
+                padding: 5px;
+                border: 1px solid #ccc;
+                background: white;
+                color: #333;
+                cursor: pointer;
+            }
+
+            .eliminar {
+                background: #e03131 !important;
+                color: white !important;
+                border: none !important;
+                padding: 7px !important;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .total {
+                text-align: right;
+                font-size: 23px;
+                color: #087f5b;
+                font-weight: bold;
+                margin-top: 20px;
+            }
+
+            @@media (max-width: 900px) {
+                .productos {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+            }
+
+            @@media (max-width: 600px) {
+                header {
+                    flex-wrap: wrap;
+                }
+
+                .buscador {
+                    width: 100%;
+                    flex-basis: 100%;
+                }
+
+                .productos {
+                    grid-template-columns: 1fr;
+                }
+            }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Super<span>Market</span></div>
+
+        <input id="buscador"
+               class="buscador"
+               type="text"
+               placeholder="Buscar producto..."
+               onkeyup="buscar()">
+
+        <div class="carrito">
+            🛒 <span id="contador">0</span>
+        </div>
+    </header>
+
+    <nav>
+        <button onclick="categoria('todos')">Todos</button>
+        <button onclick="categoria('frutas')">🍎 Frutas</button>
+        <button onclick="categoria('verduras')">🥦 Verduras</button>
+        <button onclick="categoria('lacteos')">🥛 Lácteos</button>
+        <button onclick="categoria('bebidas')">🥤 Bebidas</button>
+    </nav>
+
+    <main class="contenedor">
+
+        <div class="banner">
+            <h1>Ofertas de la semana 🛒</h1>
+            <p>Encuentra productos a precios especiales.</p>
+            <button onclick="ofertas()">Ver ofertas</button>
+        </div>
+
+        <h2>Productos</h2>
+
+        <div class="productos">
+
+            <div class="producto" data-categoria="frutas" data-nombre="Manzana">
+                <span class="oferta">OFERTA</span>
+                <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6">
+                <div class="categoria">Frutas</div>
+                <h3>Manzana roja</h3>
+                <div class="precio">$55</div>
+                <button onclick="agregar('Manzana',55)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="frutas" data-nombre="Platano">
+                <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e">
+                <div class="categoria">Frutas</div>
+                <h3>Plátano</h3>
+                <div class="precio">$32</div>
+                <button onclick="agregar('Plátano',32)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="frutas" data-nombre="Naranja">
+                <img src="https://images.unsplash.com/photo-1557800636-894a64c1696f">
+                <div class="categoria">Frutas</div>
+                <h3>Naranja</h3>
+                <div class="precio">$38</div>
+                <button onclick="agregar('Naranja',38)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="verduras" data-nombre="Papa">
+                <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655">
+                <div class="categoria">Verduras</div>
+                <h3>Papa</h3>
+                <div class="precio">$35</div>
+                <button onclick="agregar('Papa',35)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="verduras" data-nombre="Tomate">
+                <img src="https://images.unsplash.com/photo-1546094096-0df4bcaaa337">
+                <div class="categoria">Verduras</div>
+                <h3>Tomate</h3>
+                <div class="precio">$42</div>
+                <button onclick="agregar('Tomate',42)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="verduras" data-nombre="Zanahoria">
+                <img src="https://images.unsplash.com/photo-1447175008436-054170c2e979">
+                <div class="categoria">Verduras</div>
+                <h3>Zanahoria</h3>
+                <div class="precio">$28</div>
+                <button onclick="agregar('Zanahoria',28)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="lacteos" data-nombre="Leche">
+                <span class="oferta">OFERTA</span>
+                <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b">
+                <div class="categoria">Lácteos</div>
+                <h3>Leche</h3>
+                <div class="precio">$28</div>
+                <button onclick="agregar('Leche',28)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="lacteos" data-nombre="Queso">
+                <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d">
+                <div class="categoria">Lácteos</div>
+                <h3>Queso</h3>
+                <div class="precio">$89</div>
+                <button onclick="agregar('Queso',89)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="lacteos" data-nombre="Yogurt">
+                <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777">
+                <div class="categoria">Lácteos</div>
+                <h3>Yogurt</h3>
+                <div class="precio">$32</div>
+                <button onclick="agregar('Yogurt',32)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="bebidas" data-nombre="Coca Cola">
+                <span class="oferta">OFERTA</span>
+                <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7">
+                <div class="categoria">Bebidas</div>
+                <h3>Coca Cola 3L</h3>
+                <div class="precio">$45</div>
+                <button onclick="agregar('Coca Cola 3L',45)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="bebidas" data-nombre="Agua">
+                <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d">
+                <div class="categoria">Bebidas</div>
+                <h3>Agua natural</h3>
+                <div class="precio">$15</div>
+                <button onclick="agregar('Agua natural',15)">Agregar al carrito</button>
+            </div>
+
+            <div class="producto" data-categoria="bebidas" data-nombre="Cafe">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085">
+                <div class="categoria">Bebidas</div>
+                <h3>Café</h3>
+                <div class="precio">$95</div>
+                <button onclick="agregar('Café',95)">Agregar al carrito</button>
+            </div>
+
+        </div>
+
+        <div class="carrito-box">
+            <h2>🛒 Mi carrito</h2>
+            <div id="lista">Carrito vacío</div>
+
+            <div class="total">
+                Total: $<span id="total">0</span>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+            let carrito = [];
+
+            function agregar(nombre, precio) {
+                let producto = carrito.find(function (p) {
+                    return p.nombre === nombre;
+                });
+
+                if (producto) {
+                    producto.cantidad++;
+                } else {
+                    carrito.push({
+                        nombre: nombre,
+                        precio: precio,
+                        cantidad: 1
+                    });
+                }
+
+                mostrar();
+            }
+
+            function mostrar() {
+                let lista = document.getElementById("lista");
+                let total = 0;
+                let cantidad = 0;
+
+                lista.innerHTML = "";
+
+                carrito.forEach(function (producto, i) {
+                    let subtotal = producto.precio * producto.cantidad;
+
+                    total += subtotal;
+                    cantidad += producto.cantidad;
+
+                    lista.innerHTML +=
+                        '<div class="item">' +
+                        '<span>' + producto.nombre + '</span>' +
+                        '<div class="cantidad">' +
+                        '<button onclick="cambiar(' + i + ',-1)">-</button>' +
+                        producto.cantidad +
+                        '<button onclick="cambiar(' + i + ',1)">+</button>' +
+                        '</div>' +
+                        '<strong>$' + subtotal + '</strong>' +
+                        '<button class="eliminar" onclick="eliminar(' + i + ')">X</button>' +
+                        '</div>';
+                });
+
+                if (carrito.length === 0) {
+                    lista.innerHTML = "Carrito vacío";
+                }
+
+                document.getElementById("total").innerText = total;
+                document.getElementById("contador").innerText = cantidad;
+            }
+
+            function cambiar(i, cambio) {
+                carrito[i].cantidad += cambio;
+
+                if (carrito[i].cantidad <= 0) {
+                    carrito.splice(i, 1);
+                }
+
+                mostrar();
+            }
+
+            function eliminar(i) {
+                carrito.splice(i, 1);
+                mostrar();
+            }
+
+            function buscar() {
+                let texto = document.getElementById("buscador").value.toLowerCase();
+                let productos = document.querySelectorAll(".producto");
+
+                productos.forEach(function (producto) {
+                    let nombre = producto.dataset.nombre.toLowerCase();
+
+                    if (nombre.includes(texto)) {
+                        producto.style.display = "block";
+                    } else {
+                        producto.style.display = "none";
+                    }
+                });
+            }
+
+            function categoria(tipo) {
+                let productos = document.querySelectorAll(".producto");
+
+                productos.forEach(function (producto) {
+                    if (tipo === "todos" || producto.dataset.categoria === tipo) {
+                        producto.style.display = "block";
+                    } else {
+                        producto.style.display = "none";
+                    }
+                });
+            }
+
+            function ofertas() {
+                let productos = document.querySelectorAll(".producto");
+
+                productos.forEach(function (producto) {
+                    if (producto.querySelector(".oferta")) {
+                        producto.style.display = "block";
+                    } else {
+                        producto.style.display = "none";
+                    }
+                });
+            }
+
+            mostrar();
+    </script>
+
+</body>
+</html>
