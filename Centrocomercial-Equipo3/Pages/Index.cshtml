@@ -1,15 +1,22 @@
 ﻿@page
 @{
-    ViewData["Title"] = "SuperMarket";
+    ViewData["Title"] = "Mercado Central";
 }
 
+<!-- Indica que el documento utiliza HTML5 -->
 <!DOCTYPE html>
+<!-- Inicio de la página y se indica que el idioma principal es español -->
 <html lang="es">
 <head>
+    <!-- Información general de la página, estilos y configuración -->
+    <!-- Permite utilizar correctamente acentos y caracteres especiales -->
     <meta charset="UTF-8">
+    <!-- Hace que la página se adapte a celulares, tablets y computadoras -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SuperMarket</title>
+    <!-- Título que aparece en la pestaña del navegador -->
+    <title>Mercado Central</title>
 
+    <!-- Aquí comienza el diseño visual de la página mediante CSS -->
     <style>
             * {
                 box-sizing: border-box;
@@ -17,213 +24,420 @@
 
             body {
                 margin: 0;
-                font-family: Arial;
-                background: #f4f7f6;
-                color: #333;
+                font-family: Arial, Helvetica, sans-serif;
+                background: #f5f6f4;
+                color: #26352f;
             }
 
+            /* ===== ENCABEZADO ===== */
+            /* Esta sección controla el menú superior, logo, buscador y carrito */
+
             header {
-                background: #087f5b;
+                background: #173f35;
                 color: white;
-                padding: 20px 7%;
+                position: sticky;
+                top: 0;
+                z-index: 1000;
+                box-shadow: 0 3px 15px rgba(0,0,0,.15);
+            }
+
+            .barra {
+                width: 92%;
+                max-width: 1450px;
+                margin: auto;
+                min-height: 78px;
                 display: flex;
                 align-items: center;
-                gap: 30px;
+                gap: 25px;
             }
 
             .logo {
-                font-size: 28px;
+                font-size: 25px;
                 font-weight: bold;
+                white-space: nowrap;
             }
 
-                .logo span {
-                    color: #ffd43b;
+                .logo small {
+                    display: block;
+                    font-size: 10px;
+                    letter-spacing: 2px;
+                    color: #d8b45a;
+                    margin-top: 3px;
                 }
 
             .buscador {
                 flex: 1;
-                padding: 13px;
+                height: 44px;
                 border: none;
-                border-radius: 8px;
-                font-size: 15px;
-            }
-
-            .carrito {
-                background: white;
-                color: #087f5b;
-                padding: 12px 18px;
-                border-radius: 8px;
-                font-weight: bold;
-            }
-
-            nav {
-                background: white;
-                padding: 15px 7%;
-                display: flex;
-                gap: 25px;
-                border-bottom: 1px solid #ddd;
-            }
-
-                nav button {
-                    border: none;
-                    background: none;
-                    cursor: pointer;
-                    font-weight: bold;
-                    color: #444;
-                }
-
-                    nav button:hover {
-                        color: #087f5b;
-                    }
-
-            .contenedor {
-                width: 86%;
-                max-width: 1200px;
-                margin: 30px auto;
-            }
-
-            .banner {
-                background: #087f5b;
-                color: white;
-                padding: 30px;
-                border-radius: 15px;
-                margin-bottom: 30px;
-            }
-
-                .banner h1 {
-                    margin: 0 0 10px;
-                }
-
-                .banner button {
-                    background: #ffd43b;
-                    border: none;
-                    padding: 10px 18px;
-                    border-radius: 7px;
-                    cursor: pointer;
-                    font-weight: bold;
-                }
-
-            .productos {
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                gap: 20px;
-            }
-
-            .producto {
-                background: white;
-                padding: 15px;
-                border-radius: 12px;
-                box-shadow: 0 3px 10px #ddd;
-                position: relative;
-            }
-
-                .producto img {
-                    width: 100%;
-                    height: 160px;
-                    object-fit: contain;
-                }
-
-                .producto h3 {
-                    margin: 8px 0;
-                }
-
-            .categoria {
-                color: #777;
-                font-size: 13px;
-            }
-
-            .precio {
-                color: #087f5b;
-                font-size: 21px;
-                font-weight: bold;
-                margin: 10px 0;
-            }
-
-            .oferta {
-                position: absolute;
-                top: 10px;
-                left: 10px;
-                background: #e03131;
-                color: white;
-                padding: 5px;
-                border-radius: 5px;
-                font-size: 12px;
-            }
-
-            .producto button {
-                width: 100%;
-                background: #087f5b;
-                color: white;
-                border: none;
-                padding: 10px;
                 border-radius: 7px;
-                cursor: pointer;
+                padding: 0 18px;
+                font-size: 15px;
+                outline: none;
             }
 
-                .producto button:hover {
-                    background: #056b4d;
+            .boton-carrito {
+                background: #d8b45a;
+                color: #173f35;
+                border: none;
+                border-radius: 7px;
+                height: 44px;
+                padding: 0 18px;
+                font-weight: bold;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+                .boton-carrito:hover {
+                    background: #edd184;
                 }
 
-            .carrito-box {
+            .carrito-panel {
+                display: none;
+                position: absolute;
+                right: 4%;
+                top: 70px;
+                width: 390px;
+                max-width: 92%;
                 background: white;
-                margin-top: 35px;
-                padding: 25px;
-                border-radius: 12px;
+                color: #333;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 12px 35px rgba(0,0,0,.25);
             }
+
+                .carrito-panel.activo {
+                    display: block;
+                }
+
+                .carrito-panel h3 {
+                    margin: 0 0 15px;
+                    color: #173f35;
+                }
 
             .item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                border-bottom: 1px solid #ddd;
-                padding: 12px 0;
+                display: grid;
+                grid-template-columns: 1fr auto auto;
                 gap: 10px;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px solid #e5e5e5;
+                font-size: 14px;
             }
 
             .cantidad button {
-                width: 30px;
-                padding: 5px;
+                width: 26px;
+                height: 26px;
                 border: 1px solid #ccc;
                 background: white;
-                color: #333;
+                border-radius: 4px;
                 cursor: pointer;
             }
 
             .eliminar {
-                background: #e03131 !important;
-                color: white !important;
-                border: none !important;
-                padding: 7px !important;
-                border-radius: 5px;
+                border: none;
+                background: #a83b3b;
+                color: white;
+                border-radius: 4px;
+                padding: 5px 7px;
                 cursor: pointer;
             }
 
             .total {
                 text-align: right;
-                font-size: 23px;
-                color: #087f5b;
+                font-size: 20px;
                 font-weight: bold;
-                margin-top: 20px;
+                color: #173f35;
+                margin-top: 16px;
+            }
+
+            /* ===== CATEGORIAS ===== */
+            /* Botones que permiten filtrar los productos por categoría */
+
+            .categorias {
+                background: white;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .categorias-contenido {
+                width: 92%;
+                max-width: 1450px;
+                margin: auto;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+
+            .categorias button {
+                background: white;
+                border: 1px solid #d6ddd9;
+                color: #38534a;
+                border-radius: 20px;
+                padding: 9px 15px;
+                cursor: pointer;
+                white-space: nowrap;
+            }
+
+                .categorias button:hover,
+                .categorias button.activa {
+                    background: #173f35;
+                    color: white;
+                    border-color: #173f35;
+                }
+
+            /* ===== CONTENIDO ===== */
+            /* Contenido principal, banner y área donde aparecen los productos */
+
+            .contenedor {
+                width: 92%;
+                max-width: 1450px;
+                margin: 25px auto 50px;
+            }
+
+            .hero {
+                background: linear-gradient(110deg, #173f35, #286b58);
+                min-height: 250px;
+                border-radius: 12px;
+                color: white;
+                padding: 42px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 28px;
+            }
+
+            .hero-text {
+                max-width: 650px;
+            }
+
+            .hero h1 {
+                margin: 0 0 10px;
+                font-size: 38px;
+            }
+
+            .hero p {
+                font-size: 17px;
+                color: #e7eeeb;
+                line-height: 1.5;
+            }
+
+            .hero button {
+                background: #d8b45a;
+                color: #173f35;
+                border: none;
+                padding: 12px 22px;
+                border-radius: 6px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            .hero-badge {
+                font-size: 70px;
+                padding-right: 50px;
+            }
+
+            .titulo {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 25px 0 18px;
+            }
+
+                .titulo h2 {
+                    margin: 0;
+                    color: #173f35;
+                }
+
+            .contador-productos {
+                color: #777;
+                font-size: 14px;
+            }
+
+            /* ===== PRODUCTOS ===== */
+            /* Diseño de cada tarjeta individual de producto */
+
+            .productos {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 17px;
+            }
+
+            .producto {
+                background: white;
+                border: 1px solid #e5e9e7;
+                border-radius: 9px;
+                padding: 13px;
+                position: relative;
+                transition: .2s;
+                min-width: 0;
+            }
+
+                .producto:hover {
+                    transform: translateY(-3px);
+                    box-shadow: 0 8px 22px rgba(0,0,0,.10);
+                }
+
+                .producto img {
+                    width: 100%;
+                    height: 165px;
+                    object-fit: cover;
+                    border-radius: 7px;
+                    background: #f2f3f1;
+                }
+
+            .etiqueta {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                background: #b33a3a;
+                color: white;
+                font-size: 10px;
+                font-weight: bold;
+                padding: 5px 7px;
+                border-radius: 4px;
+            }
+
+            .marca {
+                color: #8a928e;
+                font-size: 11px;
+                margin-top: 10px;
+            }
+
+            .producto h3 {
+                font-size: 15px;
+                margin: 5px 0;
+                min-height: 35px;
+                color: #293a34;
+            }
+
+            .presentacion {
+                font-size: 12px;
+                color: #777;
+                min-height: 17px;
+            }
+
+            .precio {
+                font-size: 20px;
+                font-weight: bold;
+                color: #173f35;
+                margin: 10px 0;
+            }
+
+            .precio-anterior {
+                color: #999;
+                text-decoration: line-through;
+                font-size: 12px;
+                margin-left: 5px;
+            }
+
+            .producto .agregar {
+                width: 100%;
+                height: 37px;
+                border: none;
+                background: #173f35;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                font-weight: bold;
+            }
+
+                .producto .agregar:hover {
+                    background: #286b58;
+                }
+
+            .sin-resultados {
+                display: none;
+                background: white;
+                border-radius: 10px;
+                text-align: center;
+                padding: 50px;
+                color: #777;
+            }
+
+            /* ===== FOOTER ===== */
+            /* Pie de página con información general de la tienda */
+
+            footer {
+                background: #173f35;
+                color: #dfe8e4;
+                padding: 35px 6%;
+                margin-top: 50px;
+            }
+
+            .footer-contenido {
+                max-width: 1450px;
+                margin: auto;
+                display: flex;
+                justify-content: space-between;
+                gap: 30px;
+                flex-wrap: wrap;
+            }
+
+            footer h3 {
+                color: white;
+                margin-top: 0;
+            }
+
+            footer p {
+                font-size: 13px;
+                color: #bdcbc5;
+            }
+
+            /* ===== RESPONSIVE ===== */
+            /* Estas reglas adaptan el diseño cuando cambia el tamaño de pantalla */
+
+            @@media (max-width: 1200px) {
+                .productos {
+                    grid-template-columns: repeat(4, 1fr);
+                }
             }
 
             @@media (max-width: 900px) {
                 .productos {
-                    grid-template-columns: repeat(2, 1fr);
+                    grid-template-columns: repeat(3, 1fr);
+                }
+
+                .hero-badge {
+                    display: none;
                 }
             }
 
-            @@media (max-width: 600px) {
-                header {
+            @@media (max-width: 650px) {
+                .barra {
                     flex-wrap: wrap;
+                    padding: 12px 0;
                 }
 
                 .buscador {
-                    width: 100%;
+                    order: 3;
                     flex-basis: 100%;
                 }
 
                 .productos {
+                    grid-template-columns: repeat(2, 1fr);
+                }
+
+                .hero {
+                    padding: 25px;
+                }
+
+                    .hero h1 {
+                        font-size: 28px;
+                    }
+
+                .carrito-panel {
+                    top: 120px;
+                }
+            }
+
+            @@media (max-width: 430px) {
+                .productos {
                     grid-template-columns: 1fr;
+                }
+
+                .boton-carrito {
+                    padding: 0 12px;
                 }
             }
     </style>
@@ -231,263 +445,388 @@
 
 <body>
 
+    <!-- ===== CUERPO PRINCIPAL DE LA PÁGINA ===== -->
+    <!-- ===== ENCABEZADO PRINCIPAL ===== -->
     <header>
-        <div class="logo">Super<span>Market</span></div>
+        <div class="barra">
 
-        <input id="buscador"
-               class="buscador"
-               type="text"
-               placeholder="Buscar producto..."
-               onkeyup="buscar()">
+            <!-- Nombre y pequeña descripción de la tienda -->
+            <div class="logo">
+                Mercado Central
+                <small>CALIDAD PARA TU HOGAR</small>
+            </div>
 
-        <div class="carrito">
-            🛒 <span id="contador">0</span>
+            <!-- Campo donde el usuario escribe el producto que desea buscar -->
+            <input id="buscador"
+                   class="buscador"
+                   type="text"
+                   placeholder="¿Qué estás buscando? Ej. leche, cereal, jabón..."
+                   onkeyup="buscar()">
+
+            <!-- Botón que abre o cierra el carrito de compras -->
+            <button class="boton-carrito" onclick="mostrarCarrito()">
+                🛒 Carrito (<span id="contador">0</span>)
+            </button>
+
+            <!-- Panel desplegable donde se muestran los productos agregados -->
+            <div id="carritoPanel" class="carrito-panel">
+                <h3>Mi carrito</h3>
+                <div id="lista">Tu carrito está vacío.</div>
+                <div class="total">
+                    Total: $<span id="total">0</span>
+                </div>
+            </div>
+
         </div>
     </header>
 
-    <nav>
-        <button onclick="categoria('todos')">Todos</button>
-        <button onclick="categoria('frutas')">🍎 Frutas</button>
-        <button onclick="categoria('verduras')">🥦 Verduras</button>
-        <button onclick="categoria('lacteos')">🥛 Lácteos</button>
-        <button onclick="categoria('bebidas')">🥤 Bebidas</button>
-    </nav>
+    <!-- ===== MENÚ DE CATEGORÍAS ===== -->
+    <section class="categorias">
+        <div class="categorias-contenido">
+            <button onclick="categoria('todos')">Todos</button>
+            <button onclick="categoria('abarrotes')">Abarrotes</button>
+            <button onclick="categoria('frutas')">Frutas</button>
+            <button onclick="categoria('verduras')">Verduras</button>
+            <button onclick="categoria('lacteos')">Lácteos</button>
+            <button onclick="categoria('bebidas')">Bebidas</button>
+            <button onclick="categoria('limpieza')">Limpieza</button>
+            <button onclick="categoria('higiene')">Higiene</button>
+            <button onclick="categoria('botanas')">Botanas</button>
+            <button onclick="categoria('congelados')">Congelados</button>
+            <button onclick="ofertas()">Ofertas</button>
+        </div>
+    </section>
 
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
     <main class="contenedor">
 
-        <div class="banner">
-            <h1>Ofertas de la semana 🛒</h1>
-            <p>Encuentra productos a precios especiales.</p>
-            <button onclick="ofertas()">Ver ofertas</button>
+        <!-- Banner principal de bienvenida y ofertas -->
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Todo para tu hogar, en un solo lugar</h1>
+                <p>
+                    Encuentra alimentos, bebidas, productos de limpieza,
+                    higiene y mucho más. Compra fácil y encuentra tus
+                    productos rápidamente.
+                </p>
+                <button onclick="ofertas()">Ver ofertas</button>
+            </div>
+
+            <div class="hero-badge">🛒</div>
+        </section>
+
+        <!-- Título y cantidad de productos mostrados -->
+        <div class="titulo">
+            <h2>Productos destacados</h2>
+            <span id="contadorProductos" class="contador-productos"></span>
         </div>
 
-        <h2>Productos</h2>
+        <!-- JavaScript coloca aquí todas las tarjetas de productos -->
+        <div id="productos" class="productos"></div>
 
-        <div class="productos">
-
-            <div class="producto" data-categoria="frutas" data-nombre="Manzana">
-                <span class="oferta">OFERTA</span>
-                <img src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6">
-                <div class="categoria">Frutas</div>
-                <h3>Manzana roja</h3>
-                <div class="precio">$55</div>
-                <button onclick="agregar('Manzana',55)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="frutas" data-nombre="Platano">
-                <img src="https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e">
-                <div class="categoria">Frutas</div>
-                <h3>Plátano</h3>
-                <div class="precio">$32</div>
-                <button onclick="agregar('Plátano',32)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="frutas" data-nombre="Naranja">
-                <img src="https://images.unsplash.com/photo-1557800636-894a64c1696f">
-                <div class="categoria">Frutas</div>
-                <h3>Naranja</h3>
-                <div class="precio">$38</div>
-                <button onclick="agregar('Naranja',38)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="verduras" data-nombre="Papa">
-                <img src="https://images.unsplash.com/photo-1518977676601-b53f82aba655">
-                <div class="categoria">Verduras</div>
-                <h3>Papa</h3>
-                <div class="precio">$35</div>
-                <button onclick="agregar('Papa',35)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="verduras" data-nombre="Tomate">
-                <img src="https://images.unsplash.com/photo-1546094096-0df4bcaaa337">
-                <div class="categoria">Verduras</div>
-                <h3>Tomate</h3>
-                <div class="precio">$42</div>
-                <button onclick="agregar('Tomate',42)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="verduras" data-nombre="Zanahoria">
-                <img src="https://images.unsplash.com/photo-1447175008436-054170c2e979">
-                <div class="categoria">Verduras</div>
-                <h3>Zanahoria</h3>
-                <div class="precio">$28</div>
-                <button onclick="agregar('Zanahoria',28)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="lacteos" data-nombre="Leche">
-                <span class="oferta">OFERTA</span>
-                <img src="https://images.unsplash.com/photo-1563636619-e9143da7973b">
-                <div class="categoria">Lácteos</div>
-                <h3>Leche</h3>
-                <div class="precio">$28</div>
-                <button onclick="agregar('Leche',28)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="lacteos" data-nombre="Queso">
-                <img src="https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d">
-                <div class="categoria">Lácteos</div>
-                <h3>Queso</h3>
-                <div class="precio">$89</div>
-                <button onclick="agregar('Queso',89)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="lacteos" data-nombre="Yogurt">
-                <img src="https://images.unsplash.com/photo-1488477181946-6428a0291777">
-                <div class="categoria">Lácteos</div>
-                <h3>Yogurt</h3>
-                <div class="precio">$32</div>
-                <button onclick="agregar('Yogurt',32)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="bebidas" data-nombre="Coca Cola">
-                <span class="oferta">OFERTA</span>
-                <img src="https://images.unsplash.com/photo-1554866585-cd94860890b7">
-                <div class="categoria">Bebidas</div>
-                <h3>Coca Cola 3L</h3>
-                <div class="precio">$45</div>
-                <button onclick="agregar('Coca Cola 3L',45)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="bebidas" data-nombre="Agua">
-                <img src="https://images.unsplash.com/photo-1548839140-29a749e1cf4d">
-                <div class="categoria">Bebidas</div>
-                <h3>Agua natural</h3>
-                <div class="precio">$15</div>
-                <button onclick="agregar('Agua natural',15)">Agregar al carrito</button>
-            </div>
-
-            <div class="producto" data-categoria="bebidas" data-nombre="Cafe">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085">
-                <div class="categoria">Bebidas</div>
-                <h3>Café</h3>
-                <div class="precio">$95</div>
-                <button onclick="agregar('Café',95)">Agregar al carrito</button>
-            </div>
-
-        </div>
-
-        <div class="carrito-box">
-            <h2>🛒 Mi carrito</h2>
-            <div id="lista">Carrito vacío</div>
-
-            <div class="total">
-                Total: $<span id="total">0</span>
-            </div>
+        <!-- Mensaje que aparece cuando la búsqueda no encuentra productos -->
+        <div id="sinResultados" class="sin-resultados">
+            <h2>No encontramos ese producto</h2>
+            <p>Prueba con otro nombre o selecciona otra categoría.</p>
         </div>
 
     </main>
 
-    <script>
-            let carrito = [];
+    <!-- ===== PIE DE PÁGINA ===== -->
+    <footer>
+        <div class="footer-contenido">
+            <div>
+                <h3>Mercado Central</h3>
+                <p>Productos para tu hogar con calidad y buen servicio.</p>
+            </div>
 
-            function agregar(nombre, precio) {
-                let producto = carrito.find(function (p) {
-                    return p.nombre === nombre;
+            <div>
+                <h3>Compra fácil</h3>
+                <p>Busca productos, selecciona una categoría y agrégalos al carrito.</p>
+            </div>
+
+            <div>
+                <h3>Atención</h3>
+                <p>Lunes a domingo · 8:00 AM - 10:00 PM</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+
+            // ===== LÓGICA DE LA TIENDA =====
+            // En esta sección se controlan productos, búsqueda, categorías y carrito.
+
+            /* ===== CATÁLOGO DE PRODUCTOS ===== */
+            // Cada producto guarda: nombre, categoría, presentación, precio, oferta e imagen.
+
+            let productos = [
+
+                /* ABARROTES */
+                ["Arroz blanco", "Abarrotes", "1 kg", 32, 0, "https://images.rappi.com.mx/products/b2eb81d0-c2b0-46d3-9ef3-aa74d3bcfcd3.jpg"],
+                ["Frijol negro", "Abarrotes", "900 g", 38, 1, "https://i5-mx.walmartimages.com/gr/images/product-images/img_large/00750107130149L.jpg"],
+                ["Pasta de trigo", "Abarrotes", "200 g", 18, 0, "https://images.unsplash.com/photo-1551462147-ff29053bfc14?auto=format&fit=crop&w=700&q=85"],
+                ["Aceite vegetal", "Abarrotes", "900 ml", 39, 1, "https://static.wixstatic.com/media/6af604_c3118ac19c14427c8698c386b20d7dc8~mv2.jpeg/v1/fill/w_980,h_980,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/6af604_c3118ac19c14427c8698c386b20d7dc8~mv2.jpeg"],
+                ["Azúcar refinada", "Abarrotes", "1 kg", 31, 0, "https://valenciana.com.mx/cdn/shop/products/AZU89450.png?v=1686151820&width=990"],
+                ["Harina de trigo", "Abarrotes", "1 kg", 27, 0, "https://i5.walmartimages.com.mx/gr/images/product-images/img_large/00750140460311L.jpg"],
+                ["Cereal de maíz", "Abarrotes", "500 g", 58, 1, "https://images.kglobalservices.com/www.kelloggs.com.co/es_co/product/product_449/prod_img-198128_prod_img-198128.jpg"],
+                ["Atún en agua", "Abarrotes", "140 g", 25, 0, "https://i5.walmartimages.com.mx/gr/images/product-images/img_large/00750104141583L.jpg"],
+
+                /* FRUTAS */
+                ["Manzana roja", "Frutas", "1 kg", 55, 1, "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=700&q=85"],
+                ["Plátano", "Frutas", "1 kg", 32, 0, "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=700&q=85"],
+                ["Naranja", "Frutas", "1 kg", 38, 0, "https://images.unsplash.com/photo-1557800636-894a64c1696f?auto=format&fit=crop&w=700&q=85"],
+                ["Fresas", "Frutas", "500 g", 68, 1, "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=700&q=85"],
+                ["Uvas verdes", "Frutas", "500 g", 72, 0, "https://zaandeea.com/wp-content/uploads/2021/03/Uva-Blanca-1024x1007.jpg"],
+                ["Mango", "Frutas", "1 kg", 45, 0, "https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=700&q=85"],
+
+                /* VERDURAS */
+                ["Papa blanca", "Verduras", "1 kg", 35, 0, "https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=700&q=85"],
+                ["Tomate rojo", "Verduras", "1 kg", 42, 1, "https://images.unsplash.com/photo-1546094096-0df4bcaaa337?auto=format&fit=crop&w=700&q=85"],
+                ["Zanahoria", "Verduras", "1 kg", 28, 0, "https://images.unsplash.com/photo-1447175008436-054170c2e979?auto=format&fit=crop&w=700&q=85"],
+                ["Lechuga fresca", "Verduras", "1 pieza", 30, 0, "https://tecolotito.elsiglodedurango.com.mx/i/2017/03/574512.jpeg"],
+                ["Brócoli", "Verduras", "1 pieza", 39, 0, "https://images.unsplash.com/photo-1459411621453-7b03977f4bfc?auto=format&fit=crop&w=700&q=85"],
+                ["Cebolla blanca", "Verduras", "1 kg", 26, 1, "https://blairfoods.com/wp-content/uploads/2023/04/cebolla2.jpg"],
+
+                /* LACTEOS */
+                ["Leche entera", "Lácteos", "1 L", 28, 1, "https://cdnx.jumpseller.com/bepensa-bebidas/image/52475969/Entera.png?1725306830"],
+                ["Queso manchego", "Lácteos", "400 g", 89, 0, "https://www.lala.com.mx/storage/app/media/Prodcutos/7501020512250-min.png"],
+                ["Yogurt natural", "Lácteos", "1 L", 32, 0, "https://i5.walmartimages.com.mx/gr/images/product-images/img_large/00750104009553L.jpg"],
+                ["Mantequilla", "Lácteos", "90 g", 46, 0, "https://i5.walmartimages.com.mx/gr/images/product-images/img_large/00871920045048L.jpg"],
+                ["Crema", "Lácteos", "450 ml", 35, 1, "https://i5.walmartimages.com.mx/gr/images/product-images/img_large/00750102056190L.jpg"],
+                ["Huevo blanco", "Lácteos", "18 piezas", 58, 1, "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=700&q=85"],
+
+                /* BEBIDAS */
+                ["Refresco cola", "Bebidas", "3 L", 45, 1, "https://images.unsplash.com/photo-1554866585-cd94860890b7?auto=format&fit=crop&w=700&q=85"],
+                ["Agua natural", "Bebidas", "1.5 L", 15, 0, "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=700&q=85"],
+                ["Café premium", "Bebidas", "250 g", 95, 0, "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=85"],
+                ["Jugo de naranja", "Bebidas", "1 L", 42, 0, "https://images.unsplash.com/photo-1600271886742-f049cd451bba?auto=format&fit=crop&w=700&q=85"],
+                ["Té natural", "Bebidas", "20 sobres", 38, 1, "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=700&q=85"],
+                ["Limonada", "Bebidas", "1 L", 35, 1, "https://images.unsplash.com/photo-1523677011781-c91d1bbe2f9e?auto=format&fit=crop&w=700&q=85"],
+
+                /* LIMPIEZA */
+                ["Detergente líquido", "Limpieza", "1 L", 79, 1, "https://images.unsplash.com/photo-1585832770485-e68a5dbfad52?auto=format&fit=crop&w=700&q=85"],
+                ["Suavizante", "Limpieza", "1 L", 64, 0, "https://images.unsplash.com/photo-1626806787461-102c1bfaaea1?auto=format&fit=crop&w=700&q=85"],
+                ["Limpiador multiusos", "Limpieza", "1 L", 49, 0, "https://images.unsplash.com/photo-1563453392212-326f5e854473?auto=format&fit=crop&w=700&q=85"],
+                ["Cloro", "Limpieza", "1 L", 29, 1, "https://images.unsplash.com/photo-1583947215259-38e31be8751f?auto=format&fit=crop&w=700&q=85"],
+                ["Esponjas", "Limpieza", "3 piezas", 25, 0, "https://images.unsplash.com/photo-1583947581924-860bda6a26df?auto=format&fit=crop&w=700&q=85"],
+                ["Papel de cocina", "Limpieza", "1 paquete", 52, 1, "https://images.unsplash.com/photo-1584555684040-bad5a7d6e8f0?auto=format&fit=crop&w=700&q=85"],
+
+                /* HIGIENE */
+                ["Shampoo", "Higiene", "650 ml", 85, 1, "https://images.unsplash.com/photo-1556228578-8c89e6adf883?auto=format&fit=crop&w=700&q=85"],
+                ["Jabón corporal", "Higiene", "3 piezas", 58, 0, "https://images.unsplash.com/photo-1607006344380-b6775a0824ad?auto=format&fit=crop&w=700&q=85"],
+                ["Pasta dental", "Higiene", "100 ml", 48, 1, "https://images.unsplash.com/photo-1559591937-e7b3c3a6f8d8?auto=format&fit=crop&w=700&q=85"],
+                ["Papel higiénico", "Higiene", "12 rollos", 79, 1, "https://images.unsplash.com/photo-1584555684040-bad5a7d6e8f0?auto=format&fit=crop&w=700&q=85"],
+                ["Desodorante", "Higiene", "150 ml", 72, 0, "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=700&q=85"],
+                ["Toallas húmedas", "Higiene", "80 piezas", 39, 0, "https://images.unsplash.com/photo-1600857544200-b2f666a9a2ec?auto=format&fit=crop&w=700&q=85"],
+
+                /* BOTANAS */
+                ["Papas clásicas", "Botanas", "170 g", 39, 1, "https://images.unsplash.com/photo-1566478989037-eec170784d0b?auto=format&fit=crop&w=700&q=85"],
+                ["Palomitas", "Botanas", "3 bolsas", 35, 0, "https://images.unsplash.com/photo-1585647347384-2593bc35786b?auto=format&fit=crop&w=700&q=85"],
+                ["Galletas", "Botanas", "180 g", 32, 0, "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=700&q=85"],
+                ["Chocolate", "Botanas", "100 g", 46, 1, "https://images.unsplash.com/photo-1548907040-4d42c3f8f6f7?auto=format&fit=crop&w=700&q=85"],
+                ["Cacahuates", "Botanas", "200 g", 44, 0, "https://images.unsplash.com/photo-1567892737950-30c4db37cd89?auto=format&fit=crop&w=700&q=85"],
+                ["Barra de cereal", "Botanas", "6 piezas", 55, 1, "https://images.unsplash.com/photo-1606313564200-e75d5e30476a?auto=format&fit=crop&w=700&q=85"],
+
+                /* CONGELADOS */
+                ["Pizza congelada", "Congelados", "400 g", 89, 1, "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=700&q=85"],
+                ["Helado de vainilla", "Congelados", "1 L", 79, 1, "https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?auto=format&fit=crop&w=700&q=85"],
+                ["Verduras congeladas", "Congelados", "500 g", 49, 0, "https://images.unsplash.com/photo-1587334206596-c0f9f7dccbe6?auto=format&fit=crop&w=700&q=85"],
+                ["Nuggets de pollo", "Congelados", "500 g", 99, 1, "https://images.unsplash.com/photo-1562967916-eb82221dfb92?auto=format&fit=crop&w=700&q=85"],
+                ["Papas a la francesa", "Congelados", "750 g", 72, 0, "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=700&q=85"],
+                ["Hamburguesas", "Congelados", "8 piezas", 115, 1, "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=85"]
+            ];
+
+            // Arreglo donde se guardan temporalmente los productos que el cliente agrega al carrito.
+            let carrito = [];
+            // Guarda la categoría que actualmente está seleccionada.
+            let categoriaActual = "todos";
+
+            // Genera visualmente las tarjetas de productos dentro de la página.
+            function mostrarProductos(lista) {
+                // Obtiene el elemento HTML donde se mostrarán los productos.
+                let contenedor = document.getElementById("productos");
+                // Obtiene el mensaje que se mostrará si no hay resultados.
+                let sinResultados = document.getElementById("sinResultados");
+                // Obtiene el texto que indica cuántos productos se están mostrando.
+                let contador = document.getElementById("contadorProductos");
+
+                contenedor.innerHTML = "";
+
+                contador.innerText = lista.length + " productos";
+
+                if (lista.length === 0) {
+                    sinResultados.style.display = "block";
+                    return;
+                }
+
+                sinResultados.style.display = "none";
+
+                lista.forEach(function (p, i) {
+
+                    let oferta = p[4] === 1;
+                    let anterior = oferta ? Math.round(p[3] * 1.15) : 0;
+
+                    contenedor.innerHTML +=
+                        '<div class="producto">' +
+
+                        (oferta ? '<span class="etiqueta">OFERTA</span>' : '') +
+
+                        '<img src="' + p[5] + '" alt="' + p[0] + '">' +
+
+                        '<div class="marca">' + p[1] + '</div>' +
+
+                        '<h3>' + p[0] + '</h3>' +
+
+                        '<div class="presentacion">' + p[2] + '</div>' +
+
+                        '<div class="precio">$' + p[3] +
+                        (oferta ? ' <span class="precio-anterior">$' + anterior + '</span>' : '') +
+                        '</div>' +
+
+                        '<button class="agregar" onclick="agregar(' + i + ')">' +
+                        'Agregar al carrito' +
+                        '</button>' +
+
+                        '</div>';
+                });
+            }
+
+            // Filtra el catálogo según la categoría seleccionada y lo escrito en el buscador.
+            function obtenerLista() {
+                let texto = document.getElementById("buscador").value.toLowerCase();
+
+                return productos.filter(function (p) {
+
+                    let coincideCategoria =
+                        categoriaActual === "todos" ||
+                        p[1].toLowerCase() === categoriaActual;
+
+                    let coincideBusqueda =
+                        p[0].toLowerCase().includes(texto) ||
+                        p[1].toLowerCase().includes(texto);
+
+                    return coincideCategoria && coincideBusqueda;
+                });
+            }
+
+            // Se ejecuta al escribir en el buscador y actualiza los resultados.
+            function buscar() {
+                mostrarProductos(obtenerLista());
+            }
+
+            // Cambia la categoría actual y muestra únicamente los productos correspondientes.
+            function categoria(tipo) {
+                categoriaActual = tipo.toLowerCase();
+                mostrarProductos(obtenerLista());
+            }
+
+            // Muestra solamente los productos marcados como oferta.
+            function ofertas() {
+                let texto = document.getElementById("buscador").value.toLowerCase();
+
+                let lista = productos.filter(function (p) {
+                    return p[4] === 1 &&
+                        (p[0].toLowerCase().includes(texto) ||
+                         p[1].toLowerCase().includes(texto));
                 });
 
-                if (producto) {
-                    producto.cantidad++;
+                categoriaActual = "todos";
+                mostrarProductos(lista);
+            }
+
+            // Agrega un producto al carrito o aumenta su cantidad si ya existe.
+            function agregar(indice) {
+                let listaVisible = obtenerLista();
+                let producto = listaVisible[indice];
+
+                if (!producto) return;
+
+                let existente = carrito.find(function (p) {
+                    return p.nombre === producto[0];
+                });
+
+                if (existente) {
+                    existente.cantidad++;
                 } else {
                     carrito.push({
-                        nombre: nombre,
-                        precio: precio,
+                        nombre: producto[0],
+                        precio: producto[3],
                         cantidad: 1
                     });
                 }
 
-                mostrar();
+                // Inicializa el carrito mostrando que está vacío y establece el contador en cero.
+            mostrarCarrito();
+                document.getElementById("carritoPanel").classList.add("activo");
             }
 
-            function mostrar() {
+            // Aumenta o disminuye la cantidad de un producto dentro del carrito.
+            function cambiar(indice, cambio) {
+                carrito[indice].cantidad += cambio;
+
+                if (carrito[indice].cantidad <= 0) {
+                    carrito.splice(indice, 1);
+                }
+
+                mostrarCarrito();
+            }
+
+            // Elimina completamente un producto del carrito.
+            function eliminar(indice) {
+                carrito.splice(indice, 1);
+                mostrarCarrito();
+            }
+
+            // Actualiza el contenido del carrito, el total y el contador superior.
+            function mostrarCarrito() {
+                let panel = document.getElementById("carritoPanel");
+                panel.classList.toggle("activo");
+
                 let lista = document.getElementById("lista");
                 let total = 0;
                 let cantidad = 0;
 
-                lista.innerHTML = "";
-
-                carrito.forEach(function (producto, i) {
-                    let subtotal = producto.precio * producto.cantidad;
-
-                    total += subtotal;
-                    cantidad += producto.cantidad;
-
-                    lista.innerHTML +=
-                        '<div class="item">' +
-                        '<span>' + producto.nombre + '</span>' +
-                        '<div class="cantidad">' +
-                        '<button onclick="cambiar(' + i + ',-1)">-</button>' +
-                        producto.cantidad +
-                        '<button onclick="cambiar(' + i + ',1)">+</button>' +
-                        '</div>' +
-                        '<strong>$' + subtotal + '</strong>' +
-                        '<button class="eliminar" onclick="eliminar(' + i + ')">X</button>' +
-                        '</div>';
-                });
-
                 if (carrito.length === 0) {
-                    lista.innerHTML = "Carrito vacío";
+                    lista.innerHTML = "Tu carrito está vacío.";
+                } else {
+                    lista.innerHTML = "";
+
+                    carrito.forEach(function (p, i) {
+
+                        let subtotal = p.precio * p.cantidad;
+                        total += subtotal;
+                        cantidad += p.cantidad;
+
+                        lista.innerHTML +=
+                            '<div class="item">' +
+
+                            '<span>' + p.nombre + '</span>' +
+
+                            '<div class="cantidad">' +
+                            '<button onclick="cambiar(' + i + ',-1)">−</button> ' +
+                            p.cantidad +
+                            ' <button onclick="cambiar(' + i + ',1)">+</button>' +
+                            '</div>' +
+
+                            '<strong>$' + subtotal + '</strong>' +
+
+                            '<button class="eliminar" onclick="eliminar(' + i + ')">X</button>' +
+
+                            '</div>';
+                    });
                 }
 
                 document.getElementById("total").innerText = total;
                 document.getElementById("contador").innerText = cantidad;
             }
 
-            function cambiar(i, cambio) {
-                carrito[i].cantidad += cambio;
+            // Carga todos los productos automáticamente cuando se abre la página.
+            mostrarProductos(productos);
+            mostrarCarrito();
 
-                if (carrito[i].cantidad <= 0) {
-                    carrito.splice(i, 1);
-                }
-
-                mostrar();
-            }
-
-            function eliminar(i) {
-                carrito.splice(i, 1);
-                mostrar();
-            }
-
-            function buscar() {
-                let texto = document.getElementById("buscador").value.toLowerCase();
-                let productos = document.querySelectorAll(".producto");
-
-                productos.forEach(function (producto) {
-                    let nombre = producto.dataset.nombre.toLowerCase();
-
-                    if (nombre.includes(texto)) {
-                        producto.style.display = "block";
-                    } else {
-                        producto.style.display = "none";
-                    }
-                });
-            }
-
-            function categoria(tipo) {
-                let productos = document.querySelectorAll(".producto");
-
-                productos.forEach(function (producto) {
-                    if (tipo === "todos" || producto.dataset.categoria === tipo) {
-                        producto.style.display = "block";
-                    } else {
-                        producto.style.display = "none";
-                    }
-                });
-            }
-
-            function ofertas() {
-                let productos = document.querySelectorAll(".producto");
-
-                productos.forEach(function (producto) {
-                    if (producto.querySelector(".oferta")) {
-                        producto.style.display = "block";
-                    } else {
-                        producto.style.display = "none";
-                    }
-                });
-            }
-
-            mostrar();
     </script>
 
 </body>
 </html>
+
